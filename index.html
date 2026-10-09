@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Devis – Création de site web</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar no-print">
+    <h1>Devis</h1>
+    <nav>
+      <button data-view="devis" class="active">Nouveau devis</button>
+      <button data-view="catalogue">Catalogue</button>
+      <button data-view="reglages">Réglages</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== Вкладка: новий devis ===== -->
+    <section id="view-devis" class="view active no-print">
+      <div class="card">
+        <h2>Client</h2>
+        <div class="grid">
+          <label>Nom<input id="c-name" autocomplete="off"></label>
+          <label>Téléphone<input id="c-phone" type="tel" autocomplete="off"></label>
+          <label>E-mail<input id="c-email" type="email" autocomplete="off"></label>
+          <label>Adresse du client<input id="c-address" autocomplete="off"></label>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Formule de départ</h2>
+        <p class="hint">Choisissez une formule, puis ajoutez ou retirez des lignes ci-dessous.</p>
+        <div id="presets" class="presets"></div>
+        <button id="clear-sel" class="link">Tout décocher</button>
+      </div>
+
+      <div id="categories"></div>
+    </section>
+
+    <!-- ===== Вкладка: каталог ===== -->
+    <section id="view-catalogue" class="view no-print">
+      <div class="card">
+        <h2>Catalogue des prestations</h2>
+        <p class="hint">Modifiez les noms et les durées : le prix se calcule tout seul (durée × tarif horaire). Les changements sont enregistrés sur cet appareil.</p>
+        <label class="inline">Tarif horaire (€)<input id="rate" type="number" min="0" step="0.5"></label>
+      </div>
+      <div id="catalogue-editor"></div>
+      <button id="reset-cat" class="link danger">Rétablir le catalogue d'origine</button>
+    </section>
+
+    <!-- ===== Вкладка: налаштування ===== -->
+    <section id="view-reglages" class="view no-print">
+      <div class="card">
+        <h2>Mes informations (en-tête du devis)</h2>
+        <div class="grid">
+          <label>Nom ou entreprise<input id="s-name"></label>
+          <label>SIRET<input id="s-siret" placeholder="à renseigner après l'enregistrement"></label>
+          <label>Adresse<input id="s-address"></label>
+          <label>Téléphone<input id="s-phone" type="tel"></label>
+          <label>E-mail<input id="s-email" type="email"></label>
+          <label>Validité du devis (jours)<input id="s-valid" type="number" min="1"></label>
+        </div>
+      </div>
+      <div class="card">
+        <h2>TVA</h2>
+        <label class="inline">
+          <select id="s-vat">
+            <option value="none">Sans TVA (micro-entreprise)</option>
+            <option value="20">TVA 20 %</option>
+          </select>
+        </label>
+        <p class="hint">À vérifier avec le site officiel service-public.fr avant d'envoyer un vrai devis.</p>
+      </div>
+      <div class="card">
+        <h2>Conditions de paiement (texte du devis)</h2>
+        <label>Conditions<textarea id="s-terms" rows="3"></textarea></label>
+      </div>
+    </section>
+
+    <!-- ===== Перегляд / друк ===== -->
+    <section id="view-preview" class="view">
+      <div class="toolbar no-print">
+        <button id="back" class="secondary">← Modifier</button>
+        <button id="print" class="primary">Imprimer / Enregistrer en PDF</button>
+      </div>
+      <article id="paper" class="paper"></article>
+    </section>
+  </main>
+
+  <div id="bar" class="bar no-print">
+    <div class="totals">
+      <span id="t-hours">0 h</span>
+      <strong id="t-ht">0,00 €</strong>
+      <small id="t-month"></small>
+    </div>
+    <button id="to-preview" class="primary">Aperçu du devis</button>
+  </div>
+
+  <script src="catalogue.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
