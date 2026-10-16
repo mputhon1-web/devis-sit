@@ -3,101 +3,173 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Devis – Création de site web</title>
+  <title>Votre site web – demande de devis</title>
+  <meta name="description" content="Choisissez les options de votre futur site web et envoyez votre demande de devis.">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <header class="topbar no-print">
-    <h1>Devis</h1>
-    <nav>
-      <button data-view="devis" class="active">Nouveau devis</button>
-      <button data-view="catalogue">Catalogue</button>
-      <button data-view="reglages">Réglages</button>
-    </nav>
+<body class="client">
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow" id="biz-name"></p>
+      <h1>Votre site web, simple et sur mesure</h1>
+      <p>Bonjour et bienvenue ! Choisissez ci-dessous ce dont vous avez besoin : vous verrez une estimation tout de suite.
+         Je reviens ensuite vers vous avec un devis personnalisé. <strong>Cette demande ne vous engage à rien.</strong></p>
+    </div>
   </header>
 
-  <main>
-    <!-- ===== Вкладка: новий devis ===== -->
-    <section id="view-devis" class="view active no-print">
-      <div class="card">
-        <h2>Client</h2>
-        <div class="grid">
-          <label>Nom<input id="c-name" autocomplete="off"></label>
-          <label>Téléphone<input id="c-phone" type="tel" autocomplete="off"></label>
-          <label>E-mail<input id="c-email" type="email" autocomplete="off"></label>
-          <label>Adresse du client<input id="c-address" autocomplete="off"></label>
+  <main class="wrap">
+    <div id="setup-warning" class="notice warn" hidden>⚠ Le site n'est pas encore configuré (Supabase). L'envoi de la demande est désactivé.</div>
+
+    <form id="f" novalidate autocomplete="on">
+
+      <section class="card">
+        <h2>1. Vous êtes</h2>
+        <div class="seg" role="radiogroup" aria-label="Type de client">
+          <label><input type="radio" name="ctype" value="particulier" checked><span>Un particulier</span></label>
+          <label><input type="radio" name="ctype" value="entreprise"><span>Une entreprise / un professionnel</span></label>
         </div>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2>Formule de départ</h2>
-        <p class="hint">Choisissez une formule, puis ajoutez ou retirez des lignes ci-dessous.</p>
-        <div id="presets" class="presets"></div>
-        <button id="clear-sel" class="link">Tout décocher</button>
-      </div>
-
-      <div id="categories"></div>
-    </section>
-
-    <!-- ===== Вкладка: каталог ===== -->
-    <section id="view-catalogue" class="view no-print">
-      <div class="card">
-        <h2>Catalogue des prestations</h2>
-        <p class="hint">Modifiez les noms et les durées : le prix se calcule tout seul (durée × tarif horaire). Les changements sont enregistrés sur cet appareil.</p>
-        <label class="inline">Tarif horaire (€)<input id="rate" type="number" min="0" step="0.5"></label>
-      </div>
-      <div id="catalogue-editor"></div>
-      <button id="reset-cat" class="link danger">Rétablir le catalogue d'origine</button>
-    </section>
-
-    <!-- ===== Вкладка: налаштування ===== -->
-    <section id="view-reglages" class="view no-print">
-      <div class="card">
-        <h2>Mes informations (en-tête du devis)</h2>
+      <section class="card">
+        <h2>2. Vos coordonnées</h2>
         <div class="grid">
-          <label>Nom ou entreprise<input id="s-name"></label>
-          <label>SIRET<input id="s-siret" placeholder="à renseigner après l'enregistrement"></label>
-          <label>Adresse<input id="s-address"></label>
-          <label>Téléphone<input id="s-phone" type="tel"></label>
-          <label>E-mail<input id="s-email" type="email"></label>
-          <label>Validité du devis (jours)<input id="s-valid" type="number" min="1"></label>
+          <label>Prénom *<input id="c-first" autocomplete="given-name"></label>
+          <label>Nom *<input id="c-last" autocomplete="family-name"></label>
+          <label>E-mail *<input id="c-email" type="email" autocomplete="email" inputmode="email"></label>
+          <label>Téléphone<input id="c-phone" type="tel" autocomplete="tel" inputmode="tel"></label>
         </div>
-      </div>
-      <div class="card">
-        <h2>TVA</h2>
-        <label class="inline">
-          <select id="s-vat">
-            <option value="none">Sans TVA (micro-entreprise)</option>
-            <option value="20">TVA 20 %</option>
-          </select>
+        <label class="full">Adresse *
+          <input id="c-address" autocomplete="off" placeholder="Commencez à taper votre adresse…">
         </label>
-        <p class="hint">À vérifier avec le site officiel service-public.fr avant d'envoyer un vrai devis.</p>
-      </div>
-      <div class="card">
-        <h2>Conditions de paiement (texte du devis)</h2>
-        <label>Conditions<textarea id="s-terms" rows="3"></textarea></label>
-      </div>
-    </section>
 
-    <!-- ===== Перегляд / друк ===== -->
-    <section id="view-preview" class="view">
-      <div class="toolbar no-print">
-        <button id="back" class="secondary">← Modifier</button>
-        <button id="print" class="primary">Imprimer / Enregistrer en PDF</button>
-      </div>
-      <article id="paper" class="paper"></article>
+        <div id="biz-fields" hidden>
+          <h3>Votre entreprise</h3>
+          <div class="grid">
+            <label>Raison sociale / nom de l'entreprise *<input id="e-company" autocomplete="organization"></label>
+            <label>SIRET (14 chiffres) *<input id="e-siret" inputmode="numeric" placeholder="123 456 789 00012"></label>
+            <label>N° de TVA intracommunautaire<input id="e-vat" placeholder="FR12345678901 (si vous êtes assujetti)"></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Votre projet</h2>
+        <label class="full">Votre activité, en quelques mots
+          <input id="p-activity" maxlength="500" placeholder="Ex. : menuisier, restaurant, coiffeuse…">
+        </label>
+
+        <fieldset>
+          <legend>Avez-vous déjà un site web ?</legend>
+          <div class="inline-opts">
+            <label class="opt"><input type="radio" name="hassite" value="non" checked> Non</label>
+            <label class="opt"><input type="radio" name="hassite" value="oui"> Oui</label>
+          </div>
+          <input id="p-siteurl" type="url" placeholder="https://…" hidden>
+        </fieldset>
+
+        <fieldset>
+          <legend>Ce que vous avez déjà</legend>
+          <div class="checks">
+            <label class="opt"><input type="checkbox" name="has" value="Logo"> Un logo</label>
+            <label class="opt"><input type="checkbox" name="has" value="Charte graphique / couleurs"> Des couleurs / une charte</label>
+            <label class="opt"><input type="checkbox" name="has" value="Textes"> Des textes</label>
+            <label class="opt"><input type="checkbox" name="has" value="Photos"> Des photos</label>
+            <label class="opt"><input type="checkbox" name="has" value="Nom de domaine"> Un nom de domaine</label>
+            <label class="opt"><input type="checkbox" name="has" value="Hébergement"> Un hébergement</label>
+          </div>
+        </fieldset>
+
+        <div class="grid">
+          <label>Votre budget
+            <select id="p-budget">
+              <option value="">Je ne sais pas encore</option>
+              <option>Moins de 500 €</option>
+              <option>500 – 1 000 €</option>
+              <option>1 000 – 2 000 €</option>
+              <option>2 000 – 4 000 €</option>
+              <option>Plus de 4 000 €</option>
+            </select>
+          </label>
+          <label>Délai souhaité
+            <select id="p-deadline">
+              <option value="">Pas de date précise</option>
+              <option>Dès que possible</option>
+              <option>Sous 1 mois</option>
+              <option>Dans 2 à 3 mois</option>
+              <option>Pas pressé</option>
+            </select>
+          </label>
+        </div>
+        <label class="full">Sites ou styles qui vous plaisent (liens, couleurs, ambiance)
+          <textarea id="p-inspiration" rows="2" maxlength="2000"></textarea>
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>4. Vos besoins</h2>
+        <p class="hint">Cochez ce qui vous intéresse. Les prix sont indicatifs (durée × tarif horaire).</p>
+        <div id="presets" class="presets"></div>
+        <div id="cats"></div>
+      </section>
+
+      <section class="card">
+        <h2>5. Autres souhaits</h2>
+        <p class="hint">Quelque chose qui n'est pas dans la liste ? Ajoutez-le ici, une idée par ligne. Je vous dirai si c'est réalisable et à quel prix. Ces lignes ne sont pas incluses dans l'estimation.</p>
+        <div id="wishes"></div>
+        <button type="button" id="add-wish" class="link">+ Ajouter une ligne</button>
+
+        <label class="full">Ce que vous ne souhaitez pas
+          <textarea id="p-dislikes" rows="2" maxlength="2000" placeholder="Ex. : pas de publicité, pas de fond sombre…"></textarea>
+        </label>
+        <label class="full">Autre message
+          <textarea id="p-message" rows="3" maxlength="3000"></textarea>
+        </label>
+      </section>
+
+      <section class="card">
+        <label class="consent">
+          <input type="checkbox" id="consent">
+          <span>J'accepte que mes données soient utilisées pour répondre à ma demande de devis. *</span>
+        </label>
+        <details class="privacy">
+          <summary>Comment sont utilisées mes données ?</summary>
+          <p><strong>Responsable :</strong> <span id="priv-biz"></span> – <span id="priv-mail"></span>.</p>
+          <p><strong>Finalité :</strong> répondre à votre demande de devis et, si vous le souhaitez, réaliser votre site.</p>
+          <p><strong>Destinataires :</strong> uniquement moi-même. Les données sont stockées chez mon prestataire d'hébergement de base de données (Supabase).</p>
+          <p><strong>Durée de conservation :</strong> <span id="priv-ret"></span> maximum si aucun contrat n'est conclu.</p>
+          <p><strong>Vos droits :</strong> accès, rectification, suppression de vos données : écrivez-moi par e-mail. Vous pouvez aussi saisir la CNIL (cnil.fr).</p>
+        </details>
+      </section>
+
+      <!-- Champ-piège contre les robots : un vrai visiteur ne le voit pas -->
+      <div class="hp" aria-hidden="true"><label>Ne pas remplir<input id="hp" tabindex="-1" autocomplete="off"></label></div>
+
+      <div id="errors" class="notice err" role="alert" hidden></div>
+    </form>
+
+    <section id="thanks" class="card thanks" hidden>
+      <h2>Merci, votre demande est enregistrée ✔</h2>
+      <p>Référence : <strong id="ref"></strong></p>
+      <p>Je reviens vers vous très vite avec un devis. Vous pouvez fermer cette page.</p>
     </section>
   </main>
 
-  <div id="bar" class="bar no-print">
+  <div class="bar" id="bar">
     <div class="totals">
-      <span id="t-hours">0 h</span>
-      <strong id="t-ht">0,00 €</strong>
-      <small id="t-month"></small>
+      <small>Estimation indicative</small>
+      <strong id="t-total">0,00 €</strong>
+      <small id="t-sub"></small>
     </div>
-    <button id="to-preview" class="primary">Aperçu du devis</button>
+    <button type="submit" form="f" class="primary" id="submit">Enregistrer ma demande</button>
   </div>
 
+  <script src="config.js"></script>
+  <script src="catalogue.js"></script>
+  <script src="sb.js"></script>
+  <script src="address.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
   <script src="catalogue.js"></script>
   <script src="app.js"></script>
 </body>
