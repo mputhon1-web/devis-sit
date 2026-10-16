@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Адмінка – заявки</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin">
+  <header class="topbar">
+    <h1>Заявки</h1>
+    <div class="top-actions" id="top-actions" hidden>
+      <span id="who"></span>
+      <button type="button" id="refresh" class="small">Оновити</button>
+      <button type="button" id="logout" class="small">Вийти</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="login" class="card narrow">
+      <h2>Вхід</h2>
+      <form id="login-form" autocomplete="on">
+        <label>E-mail<input id="l-email" type="email" autocomplete="username" required></label>
+        <label>Пароль<input id="l-pass" type="password" autocomplete="current-password" required></label>
+        <button class="primary full" id="l-btn" type="submit">Увійти</button>
+        <p id="l-err" class="notice err" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section id="app" hidden>
+      <div id="setup-warning" class="notice warn" hidden>⚠ Supabase ще не налаштовано: заповни config.js.</div>
+      <div id="tabs" class="tabs"></div>
+      <div id="list"></div>
+      <div id="detail" hidden></div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="sb.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
