@@ -87,26 +87,4 @@ window.CATALOGUE = {
       ]
     }
   ],
-  // Готові формули: id послуги -> кількість
-  presets: [
-    {
-      id: "vitrine",
-      label: "Site vitrine",
-      items: { home: 1, page_extra: 3, responsive: 1, nav: 1, images_opt: 1, design: 1, textes: 1,
-               contact_form: 1, maps: 1, horaires: 1, mentions: 1, rgpd: 1, seo: 1,
-               domain: 1, hosting: 1, followup: 1 }
-    },
-    {
-      id: "vitrine_admin",
-      label: "Vitrine + espace administrateur",
-      extends: "vitrine",
-      items: { admin_auth: 1, admin_kanban: 1, admin_notes: 1, admin_texts: 1 }
-    },
-    {
-      id: "vitrine_admin_commande",
-      label: "Vitrine + admin + commande en ligne",
-      extends: "vitrine_admin",
-      items: { menu_online: 1, cart: 1, pickup_time: 1, orders_admin: 1, menu_admin: 1 }
-    }
-  ]
-};
+  // Готові формули: id послуги -> 
